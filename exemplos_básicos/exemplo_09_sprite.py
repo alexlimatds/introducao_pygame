@@ -1,13 +1,13 @@
 import pygame
 
 class CerejaSprite(pygame.sprite.Sprite):
-  def __init__(self, x, y):
+  def __init__(self):
     pygame.sprite.Sprite.__init__(self)  # prepara o comportamento do Sprite
     cereja_img  = pygame.image.load('exemplos_básicos/cereja.png').convert_alpha()
     cereja_img = pygame.transform.scale(cereja_img, (100, 100))
-    self.image = cereja_img
-    self.rect = cereja_img.get_rect()
-    self.rect.topleft = (x, y)
+    self.image = cereja_img            # self.image é usado por Group para renderizar o sprite
+    self.rect = cereja_img.get_rect()  # self.rect é usado por Group para renderizar o sprite na posição indicada
+    self.rect.topleft = (10, 10)       # posiciona o sprite nas coordenadas indicadas
   
   def mover(self):
     if self.rect.x == 10:
@@ -18,50 +18,31 @@ class CerejaSprite(pygame.sprite.Sprite):
 class PacmanSprite(pygame.sprite.Sprite):
   def __init__(self):
     pygame.sprite.Sprite.__init__(self)  # prepara o comportamento do Sprite
-    img = pygame.image.load('exemplos_básicos/pacman.png').convert_alpha()
-    self.img_1 = pygame.transform.scale(img, (100, 100))
-    img = pygame.image.load('exemplos_básicos/pacman2.png').convert_alpha()
-    self.img_2 = pygame.transform.scale(img, (100, 100))
-    self.image = self.img_1
-    self.rect = self.image.get_rect()
-    self.rect.topleft = (250, 250)
+    pacman_img = pygame.image.load('exemplos_básicos/pacman.png').convert_alpha()
+    pacman_img = pygame.transform.scale(pacman_img, (100, 100))
+    self.image = pacman_img            # self.image é usado por Group para renderizar o sprite
+    self.rect = pacman_img.get_rect()  # self.rect é usado por Group para renderizar o sprite na posição indicada
+    self.rect.topleft = (250, 250)     # posiciona o sprite nas coordenadas indicadas
     # variáveis para controlar a movimentação do pacman
     self.velocidade = 10
     self.sentido = 1 # 1 = para a direita, -1 = para a esquerda
-    # variável para controlar a velocidade de animação do pacman
-    self.tique = 1
 
-  # O método update é usado para atualizar a animação do pacman. 
-  # Este método é chamado a cada iteração do game loop
-  def update(self):
-    if self.tique == 15: # Altera a imagem do pacman a cada 15 tiques
-      self.tique = 0
-      if self.image == self.img_1:
-        self.image = self.img_2
-      else:
-        self.image = self.img_1
-    self.tique += 1
-
-  def para_a_esquerda(self):
+  def para_a_esquerda(self): # move o sprite para a esquerda
     if self.sentido == 1:
       self.sentido = -1
-      self.img_1 = pygame.transform.flip(self.img_1, True, False)
-      self.img_2 = pygame.transform.flip(self.img_2, True, False)
-      self.image = pygame.transform.flip(self.image, True, False)
+      self.image = pygame.transform.flip(self.image, True, False) # inverte a imagem
     self.rect.x -= self.velocidade
 
-  def para_a_direita(self):
+  def para_a_direita(self): # move o sprite para a direita
     if self.sentido == -1:
       self.sentido = 1
-      self.img_1 = pygame.transform.flip(self.img_1, True, False)
-      self.img_2 = pygame.transform.flip(self.img_2, True, False)
-      self.image = pygame.transform.flip(self.image, True, False)
+      self.image = pygame.transform.flip(self.image, True, False) # inverte a imagem
     self.rect.x += self.velocidade
 
-  def para_cima(self):
+  def para_cima(self): # move o sprite para cima
     self.rect.y -= self.velocidade
 
-  def para_baixo(self):
+  def para_baixo(self): # move o sprite para baixo
     self.rect.y += self.velocidade
 
 ### GAME LOOP ###
@@ -69,12 +50,10 @@ pygame.init()
 screen = pygame.display.set_mode((600, 600))
 clock = pygame.time.Clock()
 
-# Cria sprites e grupos
+# cria sprites
+cereja = CerejaSprite()
 pacman = PacmanSprite()
-sprites_cerejas = pygame.sprite.Group([CerejaSprite(10, 10), CerejaSprite(500, 10), CerejaSprite(250, 500)])
-todos_sprites = pygame.sprite.Group()
-todos_sprites.add(pacman)
-todos_sprites.add(sprites_cerejas.sprites())
+todos_sprites = pygame.sprite.Group([cereja, pacman])
 
 while True:
   for event in pygame.event.get():
@@ -91,17 +70,13 @@ while True:
   if keys[pygame.K_DOWN]:
     pacman.para_baixo()
 
-  hit_list = pygame.sprite.spritecollide(pacman, sprites_cerejas, True) # Obtém as cerejas que colidiram com o pacman
-  # Remove do jogo as cerejas que colidiram com o pacman
-  todos_sprites.remove(hit_list)
-  sprites_cerejas.remove(hit_list)
+  # Verifica colisão e move a cereja em caso positivo
+  if pacman.rect.colliderect(cereja.rect):
+    cereja.mover()
 
-  todos_sprites.update() # chama o método update de todos os sprites em jogo
+  screen.fill((255, 255, 255)) # Limpa o quadro
 
-  screen.fill((255, 255, 255)) # limpa o quadro
-
-  todos_sprites.draw(screen) # desenha no quadro todo os sprites em jogo
+  todos_sprites.draw(screen) # Desenha todo os sprites no quadro
 
   pygame.display.flip() # Desenha o quadro atual na tela
   clock.tick(60)
-
