@@ -9,6 +9,34 @@ class Barra(pygame.sprite.Sprite): # barra da grade do jogo
     self.rect.topleft = (x, y)
     self.image.fill((0, 0, 0))
 
+class Risco(pygame.sprite.Sprite): # risco feito na grade quando há um vencedor
+  def __init__(self, celula1, celula2):
+    pygame.sprite.Sprite.__init__(self)
+    dimensao = DIMENSAO_CELULA * 3 + LARGURA_BARRA * 2
+    self.image = pygame.Surface((dimensao, dimensao), pygame.SRCALPHA)
+    self.rect = self.image.get_rect()
+    self.rect.topleft = (PADDING, PADDING)
+    x1, y1 = celula1.rect.centerx, celula1.rect.centery
+    x2, y2 = celula2.rect.centerx, celula2.rect.centery
+    if x1 == x2: # fechou coluna
+      x1, x2 = celula1.rect.centerx, celula1.rect.centerx
+      y1, y2 = celula1.rect.top, celula2.rect.bottom
+    elif y1 == y2: # fechou linha
+      x1, x2 = celula1.rect.left, celula2.rect.right
+    elif x1 < x2: # fechou diagonal principal
+      x1, x2 = celula1.rect.left, celula2.rect.right
+      y1, y2 = celula1.rect.top, celula2.rect.bottom
+    else: # dechou diagonal secundária
+      x1, x2 = celula1.rect.right, celula2.rect.left
+      y1, y2 = celula1.rect.top, celula2.rect.bottom
+    pygame.draw.line(
+      self.image, 
+      pygame.Color("green"), 
+      (x1, y1), 
+      (x2, y2), 
+      LARGURA_BARRA // 2
+    )
+
 class Celula(pygame.sprite.Sprite): # célula da grade do jogo
   def __init__(self, dimensao, x, y):
     pygame.sprite.Sprite.__init__(self)
@@ -51,19 +79,23 @@ def indices_da_celula_clicada(x, y, celulas):
 
 def checar_vencedor(matriz):
   # matriz: uma matriz de sprites do tipo Celula
+  # Retorna:
+  #   0, None, None, quando a partida ainda não acabou
+  #   -1, None, None , quando a parida acaba empatada
+  #   um inteiro que indica o vencedor, a célula de início do risco, e a célula de fim do risco
   for i in range(0, 3):
     # verifica linha
     if matriz[i][0].jogador != 0 and matriz[i][0].jogador == matriz[i][1].jogador and matriz[i][1].jogador == matriz[i][2].jogador:
-      return matriz[i][0].jogador
+      return matriz[i][0].jogador, matriz[i][0], matriz[i][2]
     # verifica coluna
     if matriz[0][i].jogador != 0 and matriz[0][i].jogador == matriz[1][i].jogador and matriz[1][i].jogador == matriz[2][i].jogador:
-      return matriz[0][i].jogador
+      return matriz[0][i].jogador, matriz[0][i], matriz[2][i]
   # verifica diagonal
   if matriz[0][0].jogador != 0 and matriz[0][0].jogador == matriz[1][1].jogador and matriz[1][1].jogador == matriz[2][2].jogador:
-    return matriz[0][0].jogador
+    return matriz[0][0].jogador, matriz[0][0], matriz[2][2]
   # verifica a outra diagonal
   if matriz[0][2].jogador != 0 and matriz[0][2].jogador == matriz[1][1].jogador and matriz[1][1].jogador == matriz[2][0].jogador:
-    return matriz[0][2].jogador
+    return matriz[0][2].jogador, matriz[0][2], matriz[2][0]
   # verifica empate
   contador = 0
   for i in range(0, 3):
@@ -71,8 +103,8 @@ def checar_vencedor(matriz):
       if matriz[i][j].jogador != 0:
         contador += 1
   if contador == 9:
-    return -1 # empate
-  return 0 # partida não acabou
+    return -1, None, None # empate
+  return 0, None, None # partida não acabou
 
 PADDING = 10 # espaçamento entre a barra e a borda da janela
 global LARGURA_BARRA
@@ -85,6 +117,7 @@ ALTURA_JANELA = LARGURA_JANELA + 100
 
 pygame.init()
 janela = pygame.display.set_mode((LARGURA_JANELA, ALTURA_JANELA))
+pygame.display.set_caption("Jogo da Velha")
 clock = pygame.time.Clock()
 font = pygame.font.Font(None, 40)
 
@@ -122,29 +155,33 @@ while True:
         elif jogada_ok and jogador_da_vez == 2:
           jogador_da_vez = 1
   
-  vencedor = checar_vencedor(celulas)
-  str = None
-  if vencedor == -1:
-    str = "EMPATE"
-  elif vencedor == 1:
-    str = "X é o vencedor"
-  elif vencedor == 2:
-    str = "0 é o vencedor"
-  else:
-    if jogador_da_vez == 1:
-      str = "É a vez do X"
+  if vencedor < 1:
+    vencedor, celula1, celula2 = checar_vencedor(celulas)
+    str = None
+    if vencedor == -1:
+      str = "EMPATE"
+    elif vencedor == 1:
+      str = "X é o vencedor"
+    elif vencedor == 2:
+      str = "0 é o vencedor"
     else:
-      str = "É a vez do 0"
-  texto = font.render(str, True, 'black')
+      if jogador_da_vez == 1:
+        str = "É a vez do X"
+      else:
+        str = "É a vez do 0"
+    texto = font.render(str, True, 'black')
 
-  sprites.update()
-  # Desenha novo quadro
-  janela.fill((255, 255, 255)) # limpa o quadro atual
-  sprites.draw(janela)
-  # Calcula posição do texto de forma que ele fique centralizado na janela
-  x = (LARGURA_JANELA // 2) - texto.get_width() // 2
-  y = ALTURA_JANELA - 70
-  janela.blit(texto, (x, y))
+    sprites.update()
+    # Desenha novo quadro
+    janela.fill((255, 255, 255)) # limpa o quadro atual
+    sprites.draw(janela)
+    if celula1:
+      risco = Risco(celula1, celula2)
+      janela.blit(risco.image, risco.rect.topleft)
+    # Calcula posição do texto de forma que ele fique centralizado na janela
+    x = (LARGURA_JANELA // 2) - texto.get_width() // 2
+    y = ALTURA_JANELA - 70
+    janela.blit(texto, (x, y))
 
-  pygame.display.flip() # Desenha o quadro atual na tela do computador
-  clock.tick(60)        # Controla a taxa de quadros por segundo (FPS)
+    pygame.display.flip() # Desenha o quadro atual na tela do computador
+    clock.tick(60)        # Controla a taxa de quadros por segundo (FPS)
