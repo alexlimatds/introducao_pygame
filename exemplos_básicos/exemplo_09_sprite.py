@@ -47,7 +47,7 @@ class PacmanSprite(pygame.sprite.Sprite):
 
 ### GAME LOOP ###
 pygame.init()
-screen = pygame.display.set_mode((600, 600))
+janela = pygame.display.set_mode((600, 600))
 clock = pygame.time.Clock()
 
 # cria sprites
@@ -74,9 +74,11 @@ while True:
   if pacman.rect.colliderect(cereja.rect):
     cereja.mover()
 
-  screen.fill((255, 255, 255)) # Limpa o quadro
+  janela.fill((255, 255, 255)) # Limpa o quadro
 
-  todos_sprites.draw(screen) # Desenha todo os sprites no quadro
+  # Desenha no quadro todo os sprites presentes no grupo. Requer que 
+  # cada sprite possua uma variável/atributo self.image
+  todos_sprites.draw(janela)
 
   pygame.display.flip() # Desenha o quadro atual na tela
   clock.tick(60)

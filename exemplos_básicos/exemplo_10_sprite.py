@@ -8,12 +8,6 @@ class CerejaSprite(pygame.sprite.Sprite):
     self.image = cereja_img
     self.rect = cereja_img.get_rect()
     self.rect.topleft = (x, y)
-  
-  def mover(self):
-    if self.rect.x == 10:
-      self.rect.topleft = (500, 500)
-    else:
-      self.rect.topleft = (10, 10)
 
 class PacmanSprite(pygame.sprite.Sprite):
   def __init__(self):
@@ -31,10 +25,10 @@ class PacmanSprite(pygame.sprite.Sprite):
     # variável para controlar a velocidade de animação do pacman
     self.tique = 1
 
-  # O método update é usado para atualizar a animação do pacman. 
+  # O método/função update é usado para atualizar a animação do pacman. 
   # Este método é chamado a cada iteração do game loop
   def update(self):
-    if self.tique == 15: # Altera a imagem do pacman a cada 15 tiques
+    if self.tique == 15: # Altera a imagem do pacman a cada 15 tiques. Um tique corresponde a uma iteração do game loop
       self.tique = 0
       if self.image == self.img_1:
         self.image = self.img_2
@@ -66,7 +60,7 @@ class PacmanSprite(pygame.sprite.Sprite):
 
 ### GAME LOOP ###
 pygame.init()
-screen = pygame.display.set_mode((600, 600))
+janela = pygame.display.set_mode((600, 600))
 clock = pygame.time.Clock()
 
 # Cria sprites e grupos
@@ -91,17 +85,21 @@ while True:
   if keys[pygame.K_DOWN]:
     pacman.para_baixo()
 
-  hit_list = pygame.sprite.spritecollide(pacman, sprites_cerejas, True) # Obtém as cerejas que colidiram com o pacman
-  # Remove do jogo as cerejas que colidiram com o pacman
-  todos_sprites.remove(hit_list)
-  sprites_cerejas.remove(hit_list)
+  # Usa a função pygame.sprite.spritecollide para detectar colisão entre 
+  # o pacman e os sprites no grupo sprites_cerejas. Requer que as sprites
+  # possuam uma variável/atributo self.rect
+  # O parâmetro True indica que os sprites/cerejas que colidiram com o pacman 
+  # devem ser removidos de todos os grupos em que se encontram. 
+  # O retorno é uma lista das cerejas que colidiram com o pacman.
+  hit_list = pygame.sprite.spritecollide(pacman, sprites_cerejas, True)
 
-  todos_sprites.update() # chama o método update de todos os sprites em jogo
+  todos_sprites.update() # chama o método update de todos os sprites presentes no grupo
 
-  screen.fill((255, 255, 255)) # limpa o quadro
+  janela.fill((255, 255, 255)) # limpa o quadro
 
-  todos_sprites.draw(screen) # desenha no quadro todo os sprites em jogo
+  # Desenha no quadro todo os sprites presentes no grupo. Requer que 
+  # cada sprite possua uma variável/atributo self.image
+  todos_sprites.draw(janela)
 
   pygame.display.flip() # Desenha o quadro atual na tela
   clock.tick(60)
-
