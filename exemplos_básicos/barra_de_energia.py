@@ -6,23 +6,23 @@ class BarraDeEnergia(pygame.sprite.Sprite):
   def __init__(self):
     pygame.sprite.Sprite.__init__(self)
     self.energia = 100 # porcentagem de energia restante
-    # A barra de energia é visualmente composta por dois retângulos. O retângulo 
-    # azul representa a quantidade restante de energia, enquanto o
-    # retânuglo vermelho representa a quantidade energia perdida
+    # A barra de energia é visualmente composta por dois retângulos, um ao lado do outro. 
+    # O retângulo azul representa a quantidade restante de energia, enquanto o
+    # retângulo vermelho representa a quantidade de energia perdida
     self.largura_barra = 300 # largura em pixels da barra de energia, incluindo os dois retângulos
-    self.altura = 50
-    self.x_barra = 10  # coordenada do canto superior esquerdo da barra de energia
-    self.y_barra = 10  # coordenada do canto superior esquerdo da barra de energia
+    self.altura_barra = 50   # altura em pixels da barra de energia
+    x_barra = 10  # coordenada do canto superior esquerdo da barra de energia
+    y_barra = 10  # coordenada do canto superior esquerdo da barra de energia
     # a largura da barra azul e da barra vermelha é calculada na função update
-    self.barra = pygame.Surface([self.largura_barra, self.altura]) # contém os retângulos azul e vermelho
+    self.barra = pygame.Surface([self.largura_barra, self.altura_barra]) # contém os retângulos azul e vermelho
     self.rect = self.barra.get_rect()
-    self.rect.topleft = (self.x_barra, self.y_barra)
+    self.rect.topleft = (x_barra, y_barra)
     self.image = self.barra
   
   def update(self):
-    self.barra.fill((255, 0, 0)) # a barra vermelha é na verdade o fundo da barra
-    largura_barra_azul = self.energia / 100 * self.largura_barra
-    rect_barra_azul = pygame.Rect(0, 0, largura_barra_azul, self.altura)
+    self.barra.fill((255, 0, 0)) # a barra vermelha é na verdade o fundo da barra de energia
+    largura_barra_azul = self.energia / 100 * self.largura_barra # largura da barra azul proporcional à quantidade de energia
+    rect_barra_azul = pygame.Rect(0, 0, largura_barra_azul, self.altura_barra)
     pygame.draw.rect(self.barra, (0, 0, 255), rect_barra_azul)
 
 pygame.init()
