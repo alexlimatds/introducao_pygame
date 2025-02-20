@@ -5,7 +5,7 @@ import pygame
 class BarraDeEnergia(pygame.sprite.Sprite):
   def __init__(self):
     pygame.sprite.Sprite.__init__(self)
-    self.energia = 100 # porcentagem de energia restante
+    self.energia = 100 # quantidade de energia disponível
     # A barra de energia é visualmente composta por dois retângulos, um ao lado do outro. 
     # O retângulo azul representa a quantidade restante de energia, enquanto o
     # retângulo vermelho representa a quantidade de energia perdida
@@ -37,7 +37,7 @@ while True:
     if event.type == pygame.QUIT:
       pygame.quit()
     elif event.type == pygame.KEYDOWN and event.key == pygame.K_a:
-      barra_de_energia.energia -= 10 # cada pressionamento da tecla A reduz a energia em 10%
+      barra_de_energia.energia -= 10 # cada pressionamento da tecla A reduz a energia em 10
  	 
   janela.fill((255, 255, 255)) # limpa o quadro atual
   
