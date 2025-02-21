@@ -27,25 +27,37 @@ class Personagem(pygame.sprite.Sprite):
     self.centro = (dimensao // 2, dimensao // 2)
     self.raio = dimensao // 2
   
-  def para_cima(self):
-    self.ultimo_y = self.rect.y
+  def para_cima(self, blocos):
     self.rect.y -= self.velocidade
-  def para_baixo(self):
-    self.ultimo_y = self.rect.y
+    hit_list = pygame.sprite.spritecollide(self, blocos, False)
+    for bloco in hit_list:
+      if bloco.rect.bottom > personagem.rect.top:
+        recuo = bloco.rect.bottom - personagem.rect.top
+        self.rect.y += recuo
+
+  def para_baixo(self, blocos):
     self.rect.y += self.velocidade
-  def para_direita(self):
-    self.ultimo_x = self.rect.x
-    self.rect.x += self.velocidade
-  def para_esquerda(self):
-    self.ultimo_x = self.rect.x
-    self.rect.x -= self.velocidade
+    hit_list = pygame.sprite.spritecollide(self, blocos, False)
+    for bloco in hit_list:
+      if self.rect.bottom > bloco.rect.top:
+        recuo = (personagem.rect.bottom - bloco.rect.top) * -1
+        self.rect.y += recuo
   
-  def anular_movimento(self):
-    # Anula o último movimento. Essa função é utilizada no game loop 
-    # quando ocorre uma colisão entreo personagem e a parede e evitar 
-    # que o personagem fique em cima da parede
-    self.rect.x = self.ultimo_x
-    self.rect.y = self.ultimo_y
+  def para_direita(self, blocos):
+    self.rect.x += self.velocidade
+    hit_list = pygame.sprite.spritecollide(self, blocos, False)
+    for bloco in hit_list:
+      if bloco.rect.x > self.rect.x: # bloco está à direita do personagem
+        recuo = (self.rect.right - bloco.rect.left) * -1
+        self.rect.x += recuo
+  
+  def para_esquerda(self, blocos):
+    self.rect.x -= self.velocidade
+    hit_list = pygame.sprite.spritecollide(self, blocos, False)
+    for bloco in hit_list:
+      if bloco.rect.x < self.rect.x: # bloco está à esquerda do personagem
+        recuo = bloco.rect.right - self.rect.left
+        self.rect.x += recuo
 
   def update(self):
     pygame.draw.circle(self.surface, "green", self.centro, self.raio)
@@ -91,7 +103,7 @@ clock = pygame.time.Clock()
 
 velocidade = 5 # velocidade do personagem
 sprites = pygame.sprite.Group()
-paredes = pygame.sprite.Group()
+blocos = pygame.sprite.Group()
 # cria e posiciona os sprites de bloco/parede de acordo com o mapa
 for i, linha in enumerate(mapa):
   for j, v in enumerate(linha):
@@ -100,7 +112,7 @@ for i, linha in enumerate(mapa):
     if v == 1:
       s = Bloco(x, y, DIM_TILE)
       sprites.add(s)
-      paredes.add(s)
+      blocos.add(s)
     elif v == 2:
       personagem = Personagem(x + 5, y, DIM_PERSONAGEM)
       sprites.add(personagem)
@@ -112,18 +124,13 @@ while True:
 
   teclas = pygame.key.get_pressed() # Para capturar o pressionamento das teclas de forma contínua
   if teclas[pygame.K_LEFT]:
-    personagem.para_esquerda()
+    personagem.para_esquerda(blocos)
   if teclas[pygame.K_RIGHT]:
-    personagem.para_direita()
+    personagem.para_direita(blocos)
   if teclas[pygame.K_UP]:
-    personagem.para_cima()
+    personagem.para_cima(blocos)
   if teclas[pygame.K_DOWN]:
-    personagem.para_baixo()
-
-  hit_list = pygame.sprite.spritecollide(personagem, paredes, False)
-  if hit_list: # anula o último movimento caso tenha havido uma colisão
-    #personagem.anular_movimento()
-    recuar_personagem(personagem, hit_list[0])
+    personagem.para_baixo(blocos)
 
   sprites.update()
   janela.fill((0, 0, 0))
