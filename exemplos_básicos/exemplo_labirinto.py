@@ -3,7 +3,7 @@
 import pygame
 
 class Bloco(pygame.sprite.Sprite):
-  # Um bloco é um pedaço de parede
+  # Um bloco é um pedaço de parede. Visualmente, é um quadrado amarelo.
   def __init__(self, x, y, dimensao):
     pygame.sprite.Sprite.__init__(self)  # prepara o comportamento do Sprite
     self.surface = pygame.Surface([dimensao, dimensao])
@@ -20,61 +20,53 @@ class Personagem(pygame.sprite.Sprite):
     self.rect.topleft = (x, y)
     self.image = self.surface
     self.velocidade = 5
-    self.ultimo_x = x  # caso o movimente precise ser anulado
-    self.ultimo_y = y  # caso o movimente precise ser anulado
     # O desenho do personagem será um círculo, então vamos 
     # guardar o centro e o raio desse círculo
     self.centro = (dimensao // 2, dimensao // 2)
     self.raio = dimensao // 2
   
+  def update(self):
+    pygame.draw.circle(self.surface, "green", self.centro, self.raio)
+
+  # Como a colisão entre o personagem e a parede ocorre apenas após a movimentação 
+  # do personagem, a detecção de colisão é realizada nas funções de movimentação
+  # definidas a seguir.
+
   def para_cima(self, blocos):
+    # Move o personagem para cima. Caso seja detectada uma colisão após a movimentação,
+    # recua o personagem de forma que ele não fique em cima da parede.
     self.rect.y -= self.velocidade
     hit_list = pygame.sprite.spritecollide(self, blocos, False)
     for bloco in hit_list:
-      if bloco.rect.bottom > personagem.rect.top:
-        recuo = bloco.rect.bottom - personagem.rect.top
-        self.rect.y += recuo
+      if bloco.rect.bottom > personagem.rect.top: # bloco está acima do personagem
+        self.rect.top = bloco.rect.bottom
 
   def para_baixo(self, blocos):
+    # Move o personagem para baixo. Caso seja detectada uma colisão após a movimentação,
+    # recua o personagem de forma que ele não fique em cima da parede.
     self.rect.y += self.velocidade
     hit_list = pygame.sprite.spritecollide(self, blocos, False)
     for bloco in hit_list:
-      if self.rect.bottom > bloco.rect.top:
-        recuo = (personagem.rect.bottom - bloco.rect.top) * -1
-        self.rect.y += recuo
+      if self.rect.bottom > bloco.rect.top: # bloco está abaixo do personagem
+        self.rect.bottom = bloco.rect.top
   
   def para_direita(self, blocos):
+    # Move o personagem para a direita. Caso seja detectada uma colisão após a movimentação,
+    # recua o personagem de forma que ele não fique em cima da parede.
     self.rect.x += self.velocidade
     hit_list = pygame.sprite.spritecollide(self, blocos, False)
     for bloco in hit_list:
       if bloco.rect.x > self.rect.x: # bloco está à direita do personagem
-        recuo = (self.rect.right - bloco.rect.left) * -1
-        self.rect.x += recuo
+        self.rect.right = bloco.rect.left
   
   def para_esquerda(self, blocos):
+    # Move o personagem para a esquerda. Caso seja detectada uma colisão após a movimentação,
+    # recua o personagem de forma que ele não fique em cima da parede.
     self.rect.x -= self.velocidade
     hit_list = pygame.sprite.spritecollide(self, blocos, False)
     for bloco in hit_list:
       if bloco.rect.x < self.rect.x: # bloco está à esquerda do personagem
-        recuo = bloco.rect.right - self.rect.left
-        self.rect.x += recuo
-
-  def update(self):
-    pygame.draw.circle(self.surface, "green", self.centro, self.raio)
-
-def recuar_personagem(personagem, bloco):
-  recuo_x = 0
-  recuo_y = 0
-  if bloco.rect.x > personagem.rect.x: # bloco está à direita do personagem
-    recuo_x = (personagem.rect.right - bloco.rect.x) * -1
-  elif bloco.rect.x < personagem.rect.x: # bloco está à esquerda do personagem
-    recuo_x = (bloco.rect.right - personagem.rect.x)
-  if bloco.rect.bottom > personagem.rect.top:
-    recuo_y = bloco.rect.bottom - personagem.rect.top
-  elif personagem.rect.bottom > bloco.rect.top:
-    pass
-  personagem.rect.x += recuo_x
-  personagem.rect.y += recuo_y
+        self.rect.left = bloco.rect.right
 
 # Mapa do labirinto como uma matriz. O valor 0 representa uma área vazia, 
 # 1 representa um bloco, 2 representa o ponto de partida do personagem.
@@ -93,15 +85,14 @@ DIM_TILE = 60 # dimensões de um tile, o qual representa uma célula do mapa
 # Calcula largura e altura da janela do jogo com base na quantidade de tiles do mapa
 DIM_JANELA = (
   len(mapa[0]) * DIM_TILE, # len(mapa[0]) obtém a quantidade de colunas do mapa
-  len(mapa) * DIM_TILE     # len(mapa[0]) obtém a quantidade de linha do mapa
+  len(mapa) * DIM_TILE     # len(mapa) obtém a quantidade de linha do mapa
 )
-DIM_PERSONAGEM = DIM_TILE * 0.7 // 1
+DIM_PERSONAGEM = DIM_TILE
 
 pygame.init()
 janela = pygame.display.set_mode(DIM_JANELA)
 clock = pygame.time.Clock()
 
-velocidade = 5 # velocidade do personagem
 sprites = pygame.sprite.Group()
 blocos = pygame.sprite.Group()
 # cria e posiciona os sprites de bloco/parede de acordo com o mapa
