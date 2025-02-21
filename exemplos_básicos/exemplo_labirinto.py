@@ -41,11 +41,28 @@ class Personagem(pygame.sprite.Sprite):
     self.rect.x -= self.velocidade
   
   def anular_movimento(self):
+    # Anula o último movimento. Essa função é utilizada no game loop 
+    # quando ocorre uma colisão entreo personagem e a parede e evitar 
+    # que o personagem fique em cima da parede
     self.rect.x = self.ultimo_x
     self.rect.y = self.ultimo_y
 
   def update(self):
     pygame.draw.circle(self.surface, "green", self.centro, self.raio)
+
+def recuar_personagem(personagem, bloco):
+  recuo_x = 0
+  recuo_y = 0
+  if bloco.rect.x > personagem.rect.x: # bloco está à direita do personagem
+    recuo_x = (personagem.rect.right - bloco.rect.x) * -1
+  elif bloco.rect.x < personagem.rect.x: # bloco está à esquerda do personagem
+    recuo_x = (bloco.rect.right - personagem.rect.x)
+  if bloco.rect.bottom > personagem.rect.top:
+    recuo_y = bloco.rect.bottom - personagem.rect.top
+  elif personagem.rect.bottom > bloco.rect.top:
+    pass
+  personagem.rect.x += recuo_x
+  personagem.rect.y += recuo_y
 
 # Mapa do labirinto como uma matriz. O valor 0 representa uma área vazia, 
 # 1 representa um bloco, 2 representa o ponto de partida do personagem.
@@ -60,8 +77,13 @@ mapa = [
   [0, 1, 2, 0, 1, 0, 0, 0], 
   [0, 1, 1, 1, 1, 0, 0, 0]
 ]
-DIM_TILE = 30 # dimensões de um tile, o qual representa uma célula do mapa
-DIM_JANELA = (len(mapa[0]) * DIM_TILE, len(mapa) * DIM_TILE) # largura e altura da janela do jogo
+DIM_TILE = 60 # dimensões de um tile, o qual representa uma célula do mapa
+# Calcula largura e altura da janela do jogo com base na quantidade de tiles do mapa
+DIM_JANELA = (
+  len(mapa[0]) * DIM_TILE, # len(mapa[0]) obtém a quantidade de colunas do mapa
+  len(mapa) * DIM_TILE     # len(mapa[0]) obtém a quantidade de linha do mapa
+)
+DIM_PERSONAGEM = DIM_TILE * 0.7 // 1
 
 pygame.init()
 janela = pygame.display.set_mode(DIM_JANELA)
@@ -80,7 +102,7 @@ for i, linha in enumerate(mapa):
       sprites.add(s)
       paredes.add(s)
     elif v == 2:
-      personagem = Personagem(x + 5, y, DIM_TILE * 0.7 // 1)
+      personagem = Personagem(x + 5, y, DIM_PERSONAGEM)
       sprites.add(personagem)
 
 while True:
@@ -100,7 +122,8 @@ while True:
 
   hit_list = pygame.sprite.spritecollide(personagem, paredes, False)
   if hit_list: # anula o último movimento caso tenha havido uma colisão
-    personagem.anular_movimento()
+    #personagem.anular_movimento()
+    recuar_personagem(personagem, hit_list[0])
 
   sprites.update()
   janela.fill((0, 0, 0))
