@@ -11,5 +11,5 @@ Repositório com códigos de exemplo de uso do PyGame.
 - [Frozen Wasteland](https://youtu.be/T5YT6XNRwoE)
 - [Macaquinho Adventures](https://www.youtube.com/watch?v=ah_F9WrzK2E)
 - [Paint](https://www.youtube.com/watch?v=bwVFfxe6Q9Y)
-- [Telu](https://youtu.be/iCMR41gym9Q)
+- [Telu (Terráqueo lunático)](https://youtu.be/iCMR41gym9Q)
 - [Tower Milson](https://www.youtube.com/watch?v=hDVEYLMmQIk)
