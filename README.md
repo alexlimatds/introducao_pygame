@@ -11,5 +11,5 @@ Repositório com códigos de exemplo de uso do PyGame.
 - Frozen Wasteland: [GitHub](https://github.com/vtamorim/Frozen-Wasteland) [Vídeo](https://youtu.be/T5YT6XNRwoE)
 - Macaquinho Adventures: [GitHub](https://github.com/Dt-Luna/macaquinho-adventures) [Vídeo](https://www.youtube.com/watch?v=ah_F9WrzK2E)
 - Paint: [GitHub](https://github.com/Isaque-Ias/Lino) [Vídeo](https://www.youtube.com/watch?v=bwVFfxe6Q9Y)
-- Telu: [GitHub](https://github.com/Araraaaaaaaa/telu-pygame---..022025) [Telu (Terráqueo lunático)](https://youtu.be/iCMR41gym9Q)
+- Telu (Terráqueo lunático): [GitHub](https://github.com/Araraaaaaaaa/telu-pygame---..022025) [Vídeo](https://youtu.be/iCMR41gym9Q)
 - Tower Milson: [GitHub](https://github.com/Deyvidjh30/Tower-Milson) [Vídeo](https://www.youtube.com/watch?v=hDVEYLMmQIk)
