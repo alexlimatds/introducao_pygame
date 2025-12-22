@@ -13,9 +13,9 @@ pacman_img = pygame.transform.scale(pacman_img, (100, 100)) # redimensionamento
 
 # posiciona imagens
 cereja_rect = cereja_img.get_rect()  # para posicionamento e detecção de colisão
-cereja_rect.topleft = (10, 10)
+cereja_rect.topleft = (10, 10)       # posição inicial da cereja
 pacman_rect = pacman_img.get_rect()  # para posicionamento e detecção de colisão
-pacman_rect.topleft = (250, 250)
+pacman_rect.topleft = (250, 250)     # posição incial do pacman
 
 # variáveis para controlar a movimentação do pacman
 velocidade = 10
