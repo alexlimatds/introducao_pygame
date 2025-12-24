@@ -9,6 +9,7 @@ class InimigoA(pygame.sprite.Sprite):
   def __init__(self, x, y, dimensao, direcao_inicial, velocidade):
     pygame.sprite.Sprite.__init__(self)
     self.surface_original = pygame.Surface([dimensao, dimensao])
+    self.surface_original.fill("green")
     self.image = self.surface_original
     self.rect = self.surface_original.get_rect()
     self.rect.topleft = (x, y)
@@ -20,7 +21,6 @@ class InimigoA(pygame.sprite.Sprite):
     self.crescimento = -1
   
   def update(self):
-    self.image.fill("green")
     # movimentação
     self.rect.y += self.velocidade
     if self.rect.y < 0:
@@ -42,6 +42,7 @@ class InimigoB(pygame.sprite.Sprite):
   def __init__(self, x, y, velocidade):
     pygame.sprite.Sprite.__init__(self)
     self.surface_original = pygame.Surface([30, 30])
+    self.surface_original.fill("red")
     self.image = self.surface_original
     self.rect = self.surface_original.get_rect()
     self.rect.topleft = (x, y)
@@ -51,7 +52,6 @@ class InimigoB(pygame.sprite.Sprite):
     self.dimensao_min = 30
   
   def update(self):
-    self.image.fill("red")
     # crescimento/diminuição
     d = self.rect.height + self.velocidade
     self.image = pygame.transform.scale(
@@ -69,7 +69,6 @@ class InimigoC(pygame.sprite.Sprite):
     self.surface_original = pygame.Surface((3, tamanho), pygame.SRCALPHA)
     rect_barra = pygame.Rect(0, 0, 3, tamanho)
     pygame.draw.rect(self.surface_original, "black", rect_barra)
-    #self.surface_original.fill("black")
     self.image = self.surface_original
     self.rect = self.surface_original.get_rect()
     self.rect.topleft = (x, y)
@@ -91,13 +90,11 @@ class Personagem(pygame.sprite.Sprite):
   def __init__(self, x, y, dimensao):
     pygame.sprite.Sprite.__init__(self)
     self.surface = pygame.Surface([dimensao, dimensao])
+    self.surface.fill((0, 0, 255))
     self.rect = self.surface.get_rect()
     self.rect.topleft = (x, y)
     self.image = self.surface
     self.velocidade = 5
-  
-  def update(self):
-    self.surface.fill((0, 0, 255))
 
   def para_cima(self):
     # Move o personagem para cima.
