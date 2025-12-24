@@ -66,12 +66,16 @@ class InimigoC(pygame.sprite.Sprite):
   # Visualmente, é uma barra preta que gira
   def __init__(self, x, y, tamanho, velocidade):
     pygame.sprite.Sprite.__init__(self)
-    self.surface_original = pygame.Surface((3, tamanho), pygame.SRCALPHA)
+    self.surface_original = pygame.Surface(
+      (3, tamanho), 
+      pygame.SRCALPHA  # define que os pixels são transparentes
+    )
     rect_barra = pygame.Rect(0, 0, 3, tamanho)
     pygame.draw.rect(self.surface_original, "black", rect_barra)
     self.image = self.surface_original
     self.rect = self.surface_original.get_rect()
     self.rect.topleft = (x, y)
+    self.mask = pygame.mask.from_surface(self.image) # para ignorar pixels transparentes na detecção de colisão
     # variáveis para controle do girto
     self.velocidade = velocidade
     self.angulo = 0
@@ -84,6 +88,7 @@ class InimigoC(pygame.sprite.Sprite):
       self.angulo
     )
     self.rect = self.image.get_rect(center=self.rect.center)
+    self.mask = pygame.mask.from_surface(self.image)
 
 class Personagem(pygame.sprite.Sprite):
   # Visualmente, é um quadrado azul
@@ -131,7 +136,8 @@ x_personagem_inicial = 5
 personagem = Personagem(x_personagem_inicial, JANELA_ALTURA / 2, 30)
 todos_sprites.add(personagem)
 # inimigos
-inimigos = pygame.sprite.Group()
+inimigos = pygame.sprite.Group()       # para inimigos sem pixels transparentes
+inimigos_mask = pygame.sprite.Group()  # para inimigos com pixels transparentes
 inimigo = InimigoA(70, 5, 50, 1, 5) # inimigo 1
 todos_sprites.add(inimigo)
 inimigos.add(inimigo)
@@ -140,10 +146,10 @@ todos_sprites.add(inimigo)
 inimigos.add(inimigo)
 inimigo = InimigoC(300, 20, 100, 1) # inimigo 3
 todos_sprites.add(inimigo)
-inimigos.add(inimigo)
+inimigos_mask.add(inimigo)
 inimigo = InimigoC(350, 180, 280, -2) # inimigo 4
 todos_sprites.add(inimigo)
-inimigos.add(inimigo)
+inimigos_mask.add(inimigo)
 
 continuar = True
 while continuar:
@@ -165,6 +171,9 @@ while continuar:
   # atualização do estado do jogo
   todos_sprites.update() # atualiza o estado de todos os sprites
   colididos = pygame.sprite.spritecollide(personagem, inimigos, False)
+  colididos.extend(
+    pygame.sprite.spritecollide(personagem, inimigos_mask, False, pygame.sprite.collide_mask)
+  )
   for i in colididos:
     personagem.rect.x = x_personagem_inicial # move personagem para posição inicial
 
