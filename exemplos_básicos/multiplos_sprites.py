@@ -4,7 +4,7 @@ import pygame
 JANELA_LARGURA = 500
 JANELA_ALTURA = 500
 
-class Inimigo(pygame.sprite.Sprite):
+class InimigoA(pygame.sprite.Sprite):
   # Visualmente, é um quadrado verde que pulsa
   def __init__(self, x, y, dimensao, direcao_inicial, velocidade):
     pygame.sprite.Sprite.__init__(self)
@@ -13,7 +13,6 @@ class Inimigo(pygame.sprite.Sprite):
     self.rect = self.surface_original.get_rect()
     self.rect.topleft = (x, y)
     # variáveis para controle de movimento
-    self.direcao_inicial = direcao_inicial
     self.velocidade = velocidade
     # variáveis para controle de pulso
     self.dimensao_max = dimensao
@@ -23,24 +22,69 @@ class Inimigo(pygame.sprite.Sprite):
   def update(self):
     self.image.fill("green")
     # movimentação
-    if self.direcao_inicial >= 0: # subindo
-      self.rect.y -= self.velocidade
-      if self.rect.y < 0:
+    self.rect.y += self.velocidade
+    if self.rect.y < 0:
         self.rect.y = 0
-        self.direcao_inicial = -1
-    else: # descendo
-      self.rect.bottom += self.velocidade
-      if self.rect.bottom > JANELA_ALTURA:
+        self.velocidade *= -1
+    if self.rect.bottom > JANELA_ALTURA:
         self.rect.bottom = JANELA_ALTURA
-        self.direcao_inicial = 1
-    # pulso
+        self.velocidade *= -1
+    # pulso: dimensões aumentam ou diminuiem em 1 pixel
     d = self.rect.width + self.crescimento
     self.image = pygame.transform.scale(self.surface_original, (d, d))
     self.rect = self.image.get_rect(center=self.rect.center)
-    if d >= self.dimensao_max:
+    if d >= self.dimensao_max or d <= self.dimensao_min:
       self.crescimento = self.crescimento * -1
-    elif d <= self.dimensao_min:
-      self.crescimento = self.crescimento * -1
+
+class InimigoB(pygame.sprite.Sprite):
+  # Visualmente, é um quadrado vermelho cuja dimensão 
+  # vertical varia
+  def __init__(self, x, y, velocidade):
+    pygame.sprite.Sprite.__init__(self)
+    self.surface_original = pygame.Surface([30, 30])
+    self.image = self.surface_original
+    self.rect = self.surface_original.get_rect()
+    self.rect.topleft = (x, y)
+    # variáveis para controle da alteração de tamanho
+    self.velocidade = velocidade
+    self.dimensao_max = JANELA_ALTURA * 0.85
+    self.dimensao_min = 30
+  
+  def update(self):
+    self.image.fill("red")
+    # crescimento/diminuição
+    d = self.rect.height + self.velocidade
+    self.image = pygame.transform.scale(
+      self.surface_original, 
+      (self.rect.width, d)
+    )
+    self.rect = self.image.get_rect(center=self.rect.center)
+    if d >= self.dimensao_max or d <= self.dimensao_min:
+      self.velocidade *= -1
+
+class InimigoC(pygame.sprite.Sprite):
+  # Visualmente, é uma barra preta que gira
+  def __init__(self, x, y, tamanho, velocidade):
+    pygame.sprite.Sprite.__init__(self)
+    self.surface_original = pygame.Surface((3, tamanho), pygame.SRCALPHA)
+    rect_barra = pygame.Rect(0, 0, 3, tamanho)
+    pygame.draw.rect(self.surface_original, "black", rect_barra)
+    #self.surface_original.fill("black")
+    self.image = self.surface_original
+    self.rect = self.surface_original.get_rect()
+    self.rect.topleft = (x, y)
+    # variáveis para controle do girto
+    self.velocidade = velocidade
+    self.angulo = 0
+  
+  def update(self):
+    # giro
+    self.angulo += self.velocidade
+    self.image = pygame.transform.rotate(
+      self.surface_original, 
+      self.angulo
+    )
+    self.rect = self.image.get_rect(center=self.rect.center)
 
 class Personagem(pygame.sprite.Sprite):
   # Visualmente, é um quadrado azul
@@ -91,13 +135,16 @@ personagem = Personagem(x_personagem_inicial, JANELA_ALTURA / 2, 30)
 todos_sprites.add(personagem)
 # inimigos
 inimigos = pygame.sprite.Group()
-inimigo = Inimigo(70, 5, 50, 1, 5) # inimigo 1
+inimigo = InimigoA(70, 5, 50, 1, 5) # inimigo 1
 todos_sprites.add(inimigo)
 inimigos.add(inimigo)
-inimigo = Inimigo(180, JANELA_ALTURA - 30, 30, -1, 20) # inimigo 2
+inimigo = InimigoB(180, JANELA_ALTURA / 2 - 15, 8) # inimigo 2
 todos_sprites.add(inimigo)
 inimigos.add(inimigo)
-inimigo = Inimigo(270, 5, 100, 1, 2) # inimigo 3
+inimigo = InimigoC(300, 20, 100, 1) # inimigo 3
+todos_sprites.add(inimigo)
+inimigos.add(inimigo)
+inimigo = InimigoC(350, 180, 280, -2) # inimigo 4
 todos_sprites.add(inimigo)
 inimigos.add(inimigo)
 
