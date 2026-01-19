@@ -1,5 +1,5 @@
 # Exemplo de jogo de plataforma
-# Fonte: From: http://programarcadegames.com/python_examples/f.php?file=platform_jumper.py
+# Fonte: http://programarcadegames.com/python_examples/f.php?file=platform_jumper.py
 
 import pygame
 
@@ -58,7 +58,6 @@ class Personagem(pygame.sprite.Sprite):
         # Verifica se alguma plataforma foi atingida durante a movimentação vertical
         plataformas_atingidas = pygame.sprite.spritecollide(self, self.plataformas, False)
         for p in plataformas_atingidas:
-            # Reset our position based on the top/bottom of the object.
             # Se está subindo, alinha a extremidade superior do personagem 
             # com a a extremidade inferior da plataforma
             if self.velocidade_y > 0:
@@ -95,7 +94,7 @@ class Personagem(pygame.sprite.Sprite):
         # Não funciona corretamente caso a movimentação seja de apenas 1 pixel.
         self.rect.y += 2
         plataformas_atingidas = pygame.sprite.spritecollide(self, self.plataformas, False)
-        # Feita a verificação de colisão, retorna o personagem para a altura inicial.
+        # Feita a verificação de colisão, retorna o personagem para a coordenada vertical inicial.
         self.rect.y -= 2
  
         # Verifica se é permitido que o personagem pule
