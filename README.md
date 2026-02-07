@@ -3,6 +3,17 @@
 Repositório com códigos de exemplo de uso do PyGame.
 
 ## Projetos desenvolvidos por alunos
+### 2025
+- Pixel Fight: [GitHub](https://github.com/yfabricios/Pygame)
+- Food Drop: [GitHub](https://github.com/ana54792/Jogo-pygame-food-drop)
+- Arena Blackout [GitHub](https://github.com/bartur-code/JogoPygame)
+- Defenda seus alunos da IA: [GitHub](https://github.com/Gabriel-Henrique-2009/Trabalho_PyGames.git)
+- Fuja do lobo pidão: [GitHub](https://github.com/litoral07/fuja-do-lobo-pid-o)
+- Dungeon Loop: [GitHub](https://github.com/heitorgtegito/Dungeon-Loop)
+- Square Defense [GitHub](https://github.com/heitormb/square-defense)
+- Entre Portas [GitHub](https://github.com/Isabella19012/Entre_portas.py.git)
+- Super Bomber Man [GitHub](https://github.com/JGustavo123/Super_bomber_man)
+
 ### 2024
 - Brick Breaker: [Vídeo](https://youtu.be/1L2g5eXDKUg)
 - Dinossário: [GitHub](https://github.com/noltib/dinossario) [Vídeo](https://www.youtube.com/watch?v=HD_WxuLu6bc)
