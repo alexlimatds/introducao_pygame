@@ -23,6 +23,7 @@ Repositório com códigos de exemplo de uso do PyGame.
 - Duelo Jo Quem Pô: [GitHub](https://github.com/Re11037-00/ppt-pygame)
 - Star Cats: [GitHub](https://github.com/sam-10445/Star_cats) [Video](https://youtu.be/JDfMMSbLZ5k)
 - Gatíleo: [GitHub](https://github.com/YasElly/Gatileo_Pygame)
+- A Canetada: [GitHub](https://github.com/rafaelalisson-maker/jogo-avaliativo)
 
 ### 2024
 - Brick Breaker: [Vídeo](https://youtu.be/1L2g5eXDKUg)
