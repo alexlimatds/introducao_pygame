@@ -4,15 +4,25 @@ Repositório com códigos de exemplo de uso do PyGame.
 
 ## Projetos desenvolvidos por alunos
 ### 2025
-- Pixel Fight: [GitHub](https://github.com/yfabricios/Pygame)
+- Pixel Fight: [GitHub](https://github.com/yfabricios/Pygame) [Vídeo](https://www.youtube.com/watch?v=zZkXRyK5f50)
 - Food Drop: [GitHub](https://github.com/ana54792/Jogo-pygame-food-drop)
-- Arena Blackout [GitHub](https://github.com/bartur-code/JogoPygame)
-- Defenda seus alunos da IA: [GitHub](https://github.com/Gabriel-Henrique-2009/Trabalho_PyGames.git)
+- Arena Blackout: [GitHub](https://github.com/bartur-code/JogoPygame)
+- Defenda seus alunos da IA: [GitHub](https://github.com/Gabriel-Henrique-2009/Trabalho_PyGames.git) [Vídeo](https://www.youtube.com/watch?v=CO_3EIB1z9g)
 - Fuja do lobo pidão: [GitHub](https://github.com/litoral07/fuja-do-lobo-pid-o)
 - Dungeon Loop: [GitHub](https://github.com/heitorgtegito/Dungeon-Loop)
-- Square Defense [GitHub](https://github.com/heitormb/square-defense)
-- Entre Portas [GitHub](https://github.com/Isabella19012/Entre_portas.py.git)
-- Super Bomber Man [GitHub](https://github.com/JGustavo123/Super_bomber_man)
+- Square Defense: [GitHub](https://github.com/heitormb/square-defense) [Vídeo](https://www.youtube.com/watch?v=VMnTsnDSB9c)
+- Entre Portas: [GitHub](https://github.com/Isabella19012/Entre_portas.py.git)
+- Super Bomber Man: [GitHub](https://github.com/JGustavo123/Super_bomber_man)
+- Resenha Defense: [GitHub](https://github.com/GueliLeonardo/Pygame2026)
+- One: [GitHub](https://github.com/JRMA-10/desenvolvimento-do-one) [Vídeo 1](https://www.youtube.com/watch?v=wabbNzkM7m0) [Vídeo 2](https://www.youtube.com/watch?v=zVcwQxheGII)
+- Brick Breaker: [GitHub](https://github.com/juliaantone/Jogo-Brick-Breaker.git)
+- Find the Rose: [GitHub](https://github.com/lilianvitoriaxx2233/JOGO-PYGAME---FIND-THE-ROSE)
+- DIATINF Contra Ataca: [GitHub](https://github.com/BoyDuro/Infoweb-Contra-ataca) [Vídeo](https://www.youtube.com/watch?v=X5rc937gnmQ)
+- Guess the Flag: [GitHub](https://github.com/gabriellimadossantosp-droid/Guess-the-flag)
+- Jogo da Memória Retrô: [GitHub](https://github.com/rafaelsdl20035/Jogo_da_Memoria_Retro.git)
+- Duelo Jo Quem Pô: [GitHub](https://github.com/Re11037-00/ppt-pygame)
+- Star Cats: [GitHub](https://github.com/sam-10445/Star_cats) [Video](https://youtu.be/JDfMMSbLZ5k)
+- Gatíleo: [GitHub](https://github.com/YasElly/Gatileo_Pygame)
 
 ### 2024
 - Brick Breaker: [Vídeo](https://youtu.be/1L2g5eXDKUg)
